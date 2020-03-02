@@ -1,24 +1,40 @@
-CREATE TABLE t_utilisateurs
-(
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, 
-    nom VARCHAR(100),
-    prenom VARCHAR(100),
-    email VARCHAR(255),
-    date_naissance DATE,
-    pays VARCHAR(255),
-    ville VARCHAR(255),
-    code_postal VARCHAR(5),
-    nombre_achat INT
-)
+CREATE TABLE IF NOT EXISTS employes (
+id_employes int(3) NOT NULL AUTO_INCREMENT,
+prenom varchar(20) DEFAULT NULL,
+nom varchar(20) DEFAULT NULL,
+sexe enum('m','f') NOT NULL,
+service varchar(30) DEFAULT NULL,
+date_embauche date DEFAULT NULL,
+salaire float DEFAULT NULL,
+PRIMARY KEY (id_employes)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 
 
 
-INSERT INTO t_utilisateurs (id, nom, prenom, email, date_naissance, pays, ville, code_postal, nombre_achat) VALUES (NULL, 'Sand', 'George', 'george.sand@france.fr', '1802-02-28', 'France', 'Paris', '75019', NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;SELECT DISTINCT(service) FROM employes
 
-INSERT INTO t_utilisateurs (id, nom, prenom, email, date_naissance, pays, ville, code_postal, nombre_achat) VALUES (NULL, 'Rebel', 'Erick', 'erick.rebel@france.fr', '1973-12-09', 'France', 'montpellier', '34000', NULL);
+SELECT id_employes, prenom, nom, sexe, service, date_embauche, salaire FROM employes
 
-INSERT INTO t_utilisateurs (id, nom, prenom, email, date_naissance, pays, ville, code_postal, nombre_achat) VALUES (NULL, 'Carré', 'Corinne', 'corinne.carré@france.fr', '1967-01-12', 'Guadeloupe', 'Le Gosier', '97190', NULL);
+SELECT nom, prenom FROM employes WHERE salaire=5000
 
-SELECT nom, prenom FROM t_utilisateurs ORDER BY nom ASC
+SELECT nom, prenom, date_embauche FROM employes WHERE date_embauche BETWEEN '2006-01-01' AND '2010-12-31'
+Affiche moi // quoi ? // de ? // nom de la table // à condition que .. (là où) // les employés soit entré dans la société entre 2006 et 2010 
 
-DELETE FROM t_utilisateurs WHERE nom='Chirac'
+CURDATE()
+
+SELECT nom, prenom, date_embauche FROM employes WHERE date_embauche BETWEEN '2006-01-01' AND CURDATE()
+
+SELECT prenom FROM employes WHERE prenom LIKE '%s'
+
+SELECT prenom FROM employes WHERE prenom LIKE '%-%'
+
+SELECT nom, prenom, service FROM employes WHERE service !='informatique'  (<> ou !: 
+
+SELECT nom, prenom, salaire FROM employes WHERE salaire < 3000
+SELECT nom, prenom, salaire FROM employes WHERE salaire < 3000 ORDER BY salaire ASC 
+SELECT nom, prenom, salaire FROM employes WHERE salaire < 3000 ORDER BY salaire ASC, prenom ASC
+
+SELECT nom, prenom, salaire FROM employes WHERE salaire < 3000 ORDER BY salaire ASC, prenom ASC
+SELECT nom, prenom, salaire FROM employes WHERE salaire < 3000 ORDER BY salaire ASC, sexe ASC
+
+SELECT nom, prenom, service, salaire FROM employes ORDER BY salaire DESC LIMIT 0,3

@@ -1,0 +1,137 @@
+CREATE TABLE IF NOT EXISTS employes (
+id_employes int(3) NOT NULL AUTO_INCREMENT,
+prenom varchar(20) DEFAULT NULL,
+nom varchar(20) DEFAULT NULL,
+sexe enum('m','f') NOT NULL,
+service varchar(30) DEFAULT NULL,
+date_embauche date DEFAULT NULL,
+salaire float DEFAULT NULL,
+PRIMARY KEY (id_employes)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
+
+
+INSERT INTO employes (id_employes, prenom, nom, sexe, service, date_embauche, salaire) VALUES
+(350, 'Jean-pierre', 'Laborde', 'm', 'direction', '1999-12-09', 5000),
+(388, 'Clement', 'Gallet', 'm', 'commercial', '2000-01-15', 2300),
+(415, 'Thomas', 'Winter', 'm', 'commercial', '2000-05-03', 3550),
+(417, 'Chloe', 'Dubar', 'f', 'production', '2001-09-05', 1900),
+(491, 'Elodie', 'Fellier', 'f', 'secretariat', '2002-02-22', 1600),
+(509, 'Fabrice', 'Grand', 'm', 'comptabilite', '2003-02-20', 1900),
+(547, 'Melanie', 'Collier', 'f', 'commercial', '2004-09-08', 3100),
+(592, 'Laura', 'Blanchet', 'f', 'direction', '2005-06-09', 4500),
+(627, 'Guillaume', 'Miller', 'm', 'commercial', '2006-07-02', 1900),
+(655, 'Celine', 'Perrin', 'f', 'commercial', '2006-09-10', 2700),
+(699, 'Julien', 'Cottet', 'm', 'secretariat', '2007-01-18', 1390),
+(701, 'Mathieu', 'Vignal', 'm', 'informatique', '2008-12-03', 2000),
+(739, 'Thierry', 'Desprez', 'm', 'secretariat', '2009-11-17', 1500),
+(780, 'Amandine', 'Thoyer', 'f', 'communication', '2010-01-23', 1500),
+(802, 'Damien', 'Durand', 'm', 'informatique', '2010-07-05', 2250),
+(854, 'Daniel', 'Chevel', 'm', 'informatique', '2011-09-28', 1700),
+(876, 'Nathalie', 'Martin', 'f', 'juridique', '2012-01-12', 3200),
+(900, 'Benoit', 'Lagarde', 'm', 'production', '2013-01-03', 2550),
+(933, 'Emilie', 'Sennard', 'f', 'commercial', '2014-09-11', 1800),
+(990, 'Stephanie', 'Lafaye', 'f', 'assistant', '2015-06-02', 1775);
+
+1. Afficher la profession de l'employé 547.
+   Réponse: SELECT service, nom, prenom FROM employes WHERE id_employes = 547
+ 
+2. Afficher la date d'embauche de : Amandine.
+   Reponse: SELECT date_embauche prenom, FROM employes WHERE prenom = 'amandine';
+
+3. Afficher le nombre de commerciaux.
+   Reponse: SELECT COUNT(*) AS 'nombre_employes' FROM employes WHERE service = 'commercial';
+
+4. Afficher le coût des commerciaux sur 1 année.
+   Reponse: SELECT SUM(salaire*12) FROM employes WHERE service = 'commercial';
+	
+5. Afficher le salaire moyen par service.
+   Reponse: SELECT service, AVG(salaire) FROM employes GROUP BY service;
+   Reponse: SELECT ROUND(salaire) FROM employes GROUP BY service;
+
+6. Afficher le nombre de recrutements sur l'année 2010.
+   Reponse: SELECT COUNT(*) AS 'nbr_recrutement_2010' FROM employes WHERE date_embauche BETWEEN '2010-01-01' AND '2010-12-31';
+            SELECT COUNT(*) AS 'nbr_recrutement_2010' FROM employes WHERE date_embauche LIKE '2010%';
+            SELECT COUNT(*) as 'nb de recrutement' FROM employes WHERE date_embauche >= '2010-01-01' AND date_embauche' <='2010-12-31';
+
+7. Augmenter le salaire pour chaque employé de 100€.
+   Reponse: UPDATE employes SET salaire = salaire+100
+
+8. Afficher le nombre de services (différents).
+   Reponse: SELECT COUNT(DISTINCT service) FROM employes;
+
+9. Afficher les informations de l'employé du service commercial gagnant le salaire le plus élevé
+   Reponse: SELECT prenom, nom, service FROM employes WHERE service = 'commercial' AND salaire = (SELECT MAX(salaire) FROM employes WHERE service = 'commercial')
+
+10. Afficher l'employé ayant été embauché en dernier.
+    Reponse: SELECT * FROM employes WHERE date-embauche = (SELECT MAX(date_embauche) FROM employes)
+
+
+
+
+    CREATE DATABASE IF NOT EXISTS bibliotheque ;
+    USE bibliotheque ;
+    CREATE TABLE abonne (
+    id_abonne INT(3) NOT NULL AUTO_INCREMENT,
+    prenom VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id_abonne)
+    ) ENGINE=InnoDB ;
+
+    CREATE TABLE emprunt (
+    id_emprunt INT(3) NOT NULL AUTO_INCREMENT,
+    id_livre INT(3) DEFAULT NULL,
+    id_abonne INT(3) DEFAULT NULL,
+    date_sortie DATE NOT NULL,
+    date_rendu DATE DEFAULT NULL,
+    PRIMARY KEY (id_emprunt)
+    ) ENGINE=InnoDB ;
+
+    CREATE TABLE livre (
+    id_livre INT(3) NOT NULL AUTO_INCREMENT,
+    auteur VARCHAR(30) NOT NULL,
+    titre VARCHAR(30) NOT NULL,
+    PRIMARY KEY (id_livre)
+    ) ENGINE=InnoDB ;
+
+               /////////////////////// CREATION DES CLEFS ETRANGERES ///////////////////////////
+               
+
+ALTER TABLE emprunt ADD FOREIGN KEY ( id_livre ) REFERENCES bibliotheque.livre (id_livre);
+
+ALTER TABLE emprunt ADD FOREIGN KEY ( id_abonne ) REFERENCES bibliotheque.abonne (id_abonne);
+
+SELECT id_livre FROM emprunt WHERE date_rendu IS NULL
+SELECT titre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE date_rendu IS NULL)
+
+SELECT id_livre FROM emprunt WHERE id_abonne = 3
+SELECT livre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE id_abonne = 3
+
+Afficher les prénoms des abonnés ayant emprunté un livre le 19/12/2014
+Reponse: SELECT id_abonne FROM emprunt WHERE date_sortie = '2014-12-19'
+    
+SELECT prenom FROM abonne WHERE id_abonne IN (SELECT id_abonne FROM emprunt WHERE date_sortie = '2014-12-19'
+ATTENTION la liste des abonnés ayant déjà emprunté un livre d'alphonse DAUDET
+
+Quels sont les titres des livres n'ayant pas été rendus à la bibliothèque ?
+1/ SELECT id_livre FROM emprunt WHERE date_rendu IS NULL
+2/ SELECT titre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE date_rendu IS NULL)
+
+Nous aimerions connaitre le n° (id) de(s) livre(s) que Chloé a emprunté à la bibliothèque
+1/ SELECT id_livre FROM emprunt WHERE id_abonne = 3
+2/ SELECT titre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE id_abonne = 3)
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
